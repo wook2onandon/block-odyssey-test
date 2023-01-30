@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin: 16px;
+}
+
+.paginationBtn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 0;
+  background: white;
+  border: 1px solid rgb(229, 229, 229);
+  color: rgb(75, 75, 75);
+  font-size: 1rem;
+}
+
+.paginationBtn:hover {
+  background: rgb(203, 203, 203);
+  cursor: pointer;
+  transform: translateY(-2px);
+}
+
+.paginationBtn[disabled] {
+  border: 1px solid rgb(245, 245, 245);
+  color: rgb(213, 213, 213);
+  cursor: revert;
+  transform: revert;
+}
+
+.paginationBtn[aria-current] {
+  background: rgb(203, 203, 203);
+  font-weight: bold;
+  cursor: revert;
+  transform: revert;
+}

@@ -1,0 +1,57 @@
+.container {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 0.8rem;
+  box-shadow: 2px 2px 2px 2px rgb(209, 208, 208);
+}
+
+.title {
+  padding: 1rem 2rem;
+}
+
+.container > .title:first-child {
+  border-bottom: 1px solid rgb(229, 229, 229);
+}
+
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 0 5rem;
+}
+
+.searchItemWrap {
+  display: flex;
+  align-items: center;
+  gap: 0 1rem;
+}
+
+.selectBox {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgb(229, 229, 229);
+  border-radius: 0.2rem;
+}
+
+.searchOption {
+  border-radius: 0.2rem;
+  padding: 0.5rem 1rem;
+}
+
+.searchInput {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgb(229, 229, 229);
+  border-radius: 0.2rem;
+}
+
+.searchBtn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: rgb(40, 40, 40);
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 0.2rem;
+  cursor: pointer;
+}
+
+.searchBtn:hover {
+  opacity: 0.8;
+}

@@ -1,0 +1,11 @@
+.bg {
+  background-color: rgb(229, 229, 229);
+  padding: 2rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.count {
+  margin: 1rem 0;
+}

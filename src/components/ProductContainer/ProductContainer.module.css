@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 0.8rem;
+  box-shadow: 2px 2px 2px 2px rgb(209, 208, 208);
+}
+
+.titleWrap {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  border-bottom: 1px solid rgb(229, 229, 229);
+}
+
+.titleList {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titleList:nth-child(1) {
+  flex: 1 0 45%;
+}
+.titleList:nth-child(2) {
+  flex: 2 0 30%;
+  justify-content: center;
+}
+
+.titleList:nth-child(3) {
+  flex: 1 0 25%;
+}
+
+.titleListItem {
+  flex: 1 0 33%;
+  text-align: center;
+}
