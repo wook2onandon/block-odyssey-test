@@ -1,38 +1,71 @@
-.container {
+.paginationContainer {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  margin: 16px;
+  list-style-type: none;
 }
 
-.paginationBtn {
-  border: none;
-  border-radius: 8px;
-  padding: 8px;
-  margin: 0;
-  background: white;
+.paginationItem {
+  padding: 0 0.75rem;
+  height: 2rem;
+  text-align: center;
+  margin: auto 4px;
+  display: flex;
+  align-items: center;
+  border-radius: 0.5rem;
   border: 1px solid rgb(229, 229, 229);
   color: rgb(75, 75, 75);
+  line-height: 1.43;
   font-size: 1rem;
+  min-width: 2rem;
 }
 
-.paginationBtn:hover {
+.paginationItem.dots:hover {
+  background-color: transparent;
+  cursor: default;
+}
+
+.paginationItem:hover {
   background: rgb(203, 203, 203);
-  cursor: pointer;
   transform: translateY(-2px);
+  cursor: pointer;
 }
 
-.paginationBtn[disabled] {
+.paginationItem.selected {
+  background: rgb(203, 203, 203);
+  cursor: revert;
+  transform: revert;
+}
+
+.arrow::before {
+  position: relative;
+  content: '';
+  display: inline-block;
+  width: 0.4em;
+  height: 0.4em;
+  border-right: 0.12em solid rgba(0, 0, 0, 0.87);
+  border-top: 0.12em solid rgba(0, 0, 0, 0.87);
+}
+
+.arrow.left {
+  transform: rotate(-135deg) translate(-50%);
+}
+
+.arrow.right {
+  transform: rotate(45deg);
+}
+
+.paginationItem.disabled {
+  pointer-events: none;
+  /* opacity: 0.4; */
   border: 1px solid rgb(245, 245, 245);
   color: rgb(213, 213, 213);
-  cursor: revert;
-  transform: revert;
 }
 
-.paginationBtn[aria-current] {
-  background: rgb(203, 203, 203);
-  font-weight: bold;
-  cursor: revert;
-  transform: revert;
+.paginationItem.disabled::before {
+  border-right: 0.12em solid rgba(0, 0, 0, 0.43);
+  border-top: 0.12em solid rgba(0, 0, 0, 0.43);
+}
+
+.paginationItem.disabled:hover {
+  background-color: transparent;
+  cursor: default;
 }

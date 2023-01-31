@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Pagination from '../Pagination/Pagination';
 import ProductList from '../ProductList/ProductList';
 import styles from './ProductContainer.module.css';
+import { useSelector } from 'react-redux';
 
-export default function ProductContainer({ productLists }) {
+export default function ProductContainer() {
+  const product = useSelector((state) => state.product.value.productList);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
@@ -25,11 +27,11 @@ export default function ProductContainer({ productLists }) {
           <div className={styles.titleListItem}>재고</div>
         </li>
       </ul>
-      {productLists.slice(offset, offset + limit).map((product) => (
+      {product.slice(offset, offset + limit).map((product) => (
         <ProductList product={product} key={product.id} />
       ))}
-      <div>
-        <label>
+      <div className={styles.indexContainer}>
+        <label className={styles.indexLable}>
           페이지당 행: &nbsp;
           <select
             type="number"
@@ -45,10 +47,11 @@ export default function ProductContainer({ productLists }) {
           </select>
         </label>
         <Pagination
-          total={productLists.length}
-          limit={limit}
-          page={page}
-          setPage={setPage}
+          className={styles.pagination}
+          currentPage={page}
+          totalCount={product.length}
+          pageSize={limit}
+          onPageChange={(page) => setPage(page)}
         />
       </div>
     </article>

@@ -1,36 +1,102 @@
 import React from 'react';
+import { usePagination, DOTS } from '../../hooks/usePagination';
 import styles from './Pagination.module.css';
 
-export default function Pagination({ total, limit, page, setPage }) {
-  const numPages = Math.ceil(total / limit);
+const Pagination = (props) => {
+  const {
+    onPageChange,
+    totalCount,
+    siblingCount = 1,
+    currentPage,
+    pageSize,
+    className,
+  } = props;
+
+  const paginationRange = usePagination({
+    currentPage,
+    totalCount,
+    siblingCount,
+    pageSize,
+  });
+
+  // if (currentPage === 0 || paginationRange.length < 2) {
+  //   return null;
+  // }
+
+  const onNext = (next) => {
+    if (next === 'next') {
+      onPageChange(currentPage + 1);
+    } else if (next === 'end') {
+      onPageChange(pageSize);
+    }
+  };
+
+  const onPrevious = (prev) => {
+    if (prev === 'prev') {
+      onPageChange(currentPage - 1);
+    } else if (prev === 'end') {
+      onPageChange(1);
+    }
+  };
+
+  let lastPage = paginationRange[paginationRange.length - 1];
   return (
-    <nav className={styles.container}>
-      <button
-        className={styles.paginationBtn}
-        onClick={() => setPage(page - 1)}
-        disabled={page === 1}
+    <ul className={`${styles.paginationContainer} ${className && className}`}>
+      <li
+        className={`${styles.paginationItem} ${
+          currentPage === 1 && styles.disabled
+        }`}
+        onClick={() => onPrevious('end')}
+      >
+        &lt;&lt;
+      </li>
+      <li
+        className={`${styles.paginationItem} ${
+          currentPage === 1 && styles.disabled
+        }`}
+        onClick={() => onPrevious('prev')}
       >
         &lt;
-      </button>
-      {Array(numPages)
-        .fill()
-        .map((_, i) => (
-          <button
-            className={styles.paginationBtn}
-            key={i + 1}
-            onClick={() => setPage(i + 1)}
-            aria-current={page === i + 1 ? 'page' : null}
+      </li>
+      {paginationRange.map((pageNumber, idx) => {
+        if (pageNumber === DOTS) {
+          return (
+            <li className={`${styles.paginationItem} ${styles.dots}`} key={idx}>
+              &#8230;
+            </li>
+          );
+        }
+        return (
+          <li
+            className={`${styles.paginationItem} ${
+              pageNumber === currentPage && styles.selected
+            }`}
+            onClick={() => onPageChange(pageNumber)}
+            key={idx}
           >
-            {i + 1}
-          </button>
-        ))}
-      <button
-        className={styles.paginationBtn}
-        onClick={() => setPage(page + 1)}
-        disabled={page === numPages}
+            {pageNumber}
+          </li>
+        );
+      })}
+
+      <li
+        className={`${styles.paginationItem} ${
+          currentPage === lastPage && styles.disabled
+        }`}
+        onClick={() => onNext('next')}
       >
         &gt;
-      </button>
-    </nav>
+      </li>
+      <li
+        className={`${styles.paginationItem} ${
+          currentPage === lastPage && styles.disabled
+        }`}
+        onClick={() => onNext('end')}
+      >
+        &gt;&gt;
+      </li>
+    </ul>
   );
-}
+};
+
+export default Pagination;

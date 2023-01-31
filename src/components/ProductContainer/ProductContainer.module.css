@@ -37,3 +37,42 @@
   flex: 1 0 33%;
   text-align: center;
 }
+
+.indexContainer {
+  width: 100%;
+  padding: 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.indexLable {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 20%;
+}
+
+.pagination {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+
+@media (max-width: 1200px) {
+  .indexContainer {
+    flex-direction: column-reverse;
+    gap: 2rem 0;
+  }
+  .indexLable {
+    position: static;
+    transform: translate(0, 0);
+  }
+
+  .pagination {
+    position: static;
+    transform: translate(0, 0);
+  }
+}
