@@ -82,7 +82,7 @@ export default function Search() {
               </option>
             ))}
           </select>
-          <form onSubmit={onSearch}>
+          <form onSubmit={onSearch} className={styles.inputContainer}>
             <input
               type="text"
               value={searchWord ? searchWord : ''}
