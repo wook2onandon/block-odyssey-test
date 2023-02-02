@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Pagination from '../Pagination/Pagination';
 import ProductList from '../ProductList/ProductList';
 import styles from './ProductContainer.module.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeQueryParams } from '../../redux/modules/queryParams';
+import { getParameter } from '../../utils/parameter';
 
 export default function ProductContainer() {
+  let limitNum = getParameter('limit');
+  let pageNum = getParameter('page');
+
   const product = useSelector((state) => state.product.value.productList);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
-  const offset = (page - 1) * limit;
+  const queryParams = useSelector((state) => state.queryParams.value);
+
+  const offset = (queryParams.page - 1) * queryParams.limit;
+
+  const dispatch = useDispatch();
 
   return (
     <article className={styles.container}>
@@ -27,7 +34,7 @@ export default function ProductContainer() {
           <div className={styles.titleListItem}>재고</div>
         </li>
       </ul>
-      {product.slice(offset, offset + limit).map((product) => (
+      {product.slice(offset, offset + queryParams.limit).map((product) => (
         <ProductList product={product} key={product.id} />
       ))}
       <div className={styles.indexContainer}>
@@ -35,10 +42,23 @@ export default function ProductContainer() {
           페이지당 행: &nbsp;
           <select
             type="number"
-            value={limit}
+            value={limitNum ? limitNum : '10'}
             onChange={({ target: { value } }) => {
-              setLimit(Number(value));
-              setPage(1);
+              dispatch(
+                changeQueryParams({
+                  ...queryParams,
+                  limit: Number(value),
+                  page: 1,
+                }),
+              );
+              // if(product.length / queryParams.limit < pageNum) {}
+              window.history.pushState(
+                '',
+                'main',
+                `/search?category=${queryParams.category}&searchWord=${
+                  queryParams.searchWord
+                }&limit=${Number(value)}&page=${1}`,
+              );
             }}
           >
             <option value="10">10</option>
@@ -48,10 +68,22 @@ export default function ProductContainer() {
         </label>
         <Pagination
           className={styles.pagination}
-          currentPage={page}
+          currentPage={pageNum ? Number(pageNum) : 1}
           totalCount={product.length}
-          pageSize={limit}
-          onPageChange={(page) => setPage(page)}
+          pageSize={queryParams.limit}
+          onPageChange={(page) => {
+            dispatch(
+              changeQueryParams({
+                ...queryParams,
+                page: page,
+              }),
+            );
+            window.history.pushState(
+              '',
+              'main',
+              `/search?category=${queryParams.category}&searchWord=${queryParams.searchWord}&limit=${queryParams.limit}&page=${page}`,
+            );
+          }}
         />
       </div>
     </article>

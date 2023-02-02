@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './Search.module.css';
-import { useDispatch } from 'react-redux';
-import { fetching } from '../../redux/product';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetching } from '../../redux/modules/product';
+import { changeQueryParams } from '../../redux/modules/queryParams';
 import { fetchProduct } from '../../api/fetch';
+import { getParameter } from '../../utils/parameter';
+import { searchFilter } from '../../utils/filter';
 
 const OPTIONS = [
   { value: 'all', name: '전체' },
@@ -12,63 +15,50 @@ const OPTIONS = [
 ];
 
 export default function Search() {
-  const [isCategory, setIsCartegory] = useState('all');
+  let category = getParameter('category');
+  let searchWord = getParameter('searchWord');
 
+  const queryParams = useSelector((state) => state.queryParams.value);
   const dispatch = useDispatch();
-
-  const searchFilter = (res, word) => {
-    if (!word) {
-      return { productList: res };
-    } else if (isCategory === 'all') {
-      return {
-        productList: res.filter((data) => {
-          if (data.title.toLowerCase().includes(word.toLowerCase())) {
-            return data.title.toLowerCase().includes(word.toLowerCase());
-          } else if (data.brand.toLowerCase().includes(word.toLowerCase())) {
-            return data.brand.toLowerCase().includes(word.toLowerCase());
-          } else if (
-            data.description.toLowerCase().includes(word.toLowerCase())
-          ) {
-            return data.description.toLowerCase().includes(word.toLowerCase());
-          }
-        }),
-      };
-    } else if (isCategory === 'title') {
-      return {
-        productList: res.filter((data) => {
-          return data.title.toLowerCase().includes(word.toLowerCase());
-        }),
-      };
-    } else if (isCategory === 'brand') {
-      return {
-        productList: res.filter((data) => {
-          return data.brand.toLowerCase().includes(word.toLowerCase());
-        }),
-      };
-    } else if (isCategory === 'description') {
-      return {
-        productList: res.filter((data) => {
-          return data.description.toLowerCase().includes(word.toLowerCase());
-        }),
-      };
-    }
-  };
 
   const fetchProductData = async (word) => {
     const result = await fetchProduct();
-    dispatch(fetching(searchFilter(result, word)));
+    dispatch(fetching(searchFilter(result, word, queryParams.category)));
   };
 
   const onSearch = (e) => {
     e.preventDefault();
-    fetchProductData(e.target.searchWord.value);
-
-    // window.history.pushState(searchWord, null, `/${word}`);
+    fetchProductData(queryParams.searchWord);
   };
 
   const handleCategory = (e) => {
     e.preventDefault();
-    setIsCartegory(e.target.value);
+    dispatch(
+      changeQueryParams({
+        ...queryParams,
+        category: e.target.value,
+      }),
+    );
+    window.history.pushState(
+      '',
+      'main',
+      `/search?category=${e.target.value}&searchWord=${queryParams.searchWord}&limit=${queryParams.limit}&page=${queryParams.page}`,
+    );
+  };
+
+  const handleInputChange = (e) => {
+    e.preventDefault();
+    dispatch(
+      changeQueryParams({
+        ...queryParams,
+        searchWord: e.target.value,
+      }),
+    );
+    window.history.pushState(
+      '',
+      'main',
+      `/search?category=${queryParams.category}&searchWord=${e.target.value}&limit=${queryParams.limit}&page=${queryParams.page}`,
+    );
   };
 
   return (
@@ -77,7 +67,11 @@ export default function Search() {
       <div className={styles.wrap}>
         <h3 className={styles.title}>검색</h3>
         <div className={styles.searchItemWrap}>
-          <select className={styles.selectBox} onChange={handleCategory}>
+          <select
+            className={styles.selectBox}
+            onChange={handleCategory}
+            value={category ? category : 'all'}
+          >
             {OPTIONS.map((option) => (
               <option
                 key={option.value}
@@ -91,8 +85,10 @@ export default function Search() {
           <form onSubmit={onSearch}>
             <input
               type="text"
+              value={searchWord ? searchWord : ''}
               name="searchWord"
               className={styles.searchInput}
+              onChange={handleInputChange}
             />
             <button className={styles.searchBtn}>조회</button>
           </form>
